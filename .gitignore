@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+.vscode
+corefBias
+dev.json
+custom_models
+sent-bias
