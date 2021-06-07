@@ -21,6 +21,14 @@ To run all this metric on different models use:
 python main.py
 ```
 
+## Correlation Plots
+![alt text](img/ranking_bias_sum.png "Correlation plot")
+
+![alt text](img/ranking_bias_ALL.png "Correlation plot with all metric")
+
+## Visulization (Parallel Coordinates)
+Check the Parallel Coordinates [HERE](https://andreamad8.github.io/BIAS_METRIC_RANKING/vizjs/).
+
 ## Results 
 
 ***Summury***
@@ -113,12 +121,6 @@ python main.py
 |                      0.458896  |                        0.315383  |                      -0.11251     |                            -1.04912  |                          -1.73749  |                                   -1.72008   |                                0.59039   |                       0.475829  |                          1.14057   |                        1.74034   |                                 1.06145    |                            -0.719052   |                           0.0035143 |                             0.492506  |                                  -0.151598    |                                 -0.0329101  |   0.291121   |     0.383919  |   0.430059   |    0.724277   |    0.0215148 |    0.473671   |      37.8482 |   0        |          0.679293  |           0.65404  |   0.665338 |  15.6031  | 23.5604   |    4.62737 |    67.4164 |      0.831451    |       0.740365    |      0.905297    |       0.808211    |    nan | albert-xxlarge-v2       |
 |                      0.996642  |                       -0.383375  |                      -1.08142     |                            -1.62564  |                          -1.65426  |                                   -0.689632  |                                0.298167  |                      -0.995504  |                         -1.79523   |                       -1.84649   |                                 0.460877   |                            -0.409398   |                           0.591193  |                            -0.26147   |                                   0.113805    |                                  0.148962   |   0.00629356 |    -0.124795  |   0.396056   |   -0.00660598 |    0.492945  |    0.470267   |      19.8099 |   0        |          0.719697  |           0.573232 |   0.419313 |   6.98563 | 21.4985   |   19.2434  |    50.3508 |      0.234041    |       0.220117    |      0.244209    |       0.238731    |    nan | xlm-roberta-base        |
 
-## Correlation Plots
-![alt text](img/ranking_bias_sum.png "Correlation plot")
-
-![alt text](img/ranking_bias_ALL.png "Correlation plot with all metric")
-
-## Visulization (Bump Plot)
 
 
 ## Metric class
