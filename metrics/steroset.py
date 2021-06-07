@@ -13,7 +13,7 @@ class Steroset(metric.Metric):
 
     def __init__(self, batch_size=32, cuda = True, seed=42, verbose=False):
         self.download_data()
-        self.filename = os.path.abspath("dev.json")
+        self.filename = os.path.abspath(".data/dev.json")
         self.dataloader = StereoSet(self.filename)
         self.cuda = cuda
         self.device = "cuda" if self.cuda else "cpu"
@@ -22,8 +22,8 @@ class Steroset(metric.Metric):
         self.scorer = ScoreEvaluator()
 
     def download_data(self):
-        if not os.path.exists(os.path.abspath("dev.json")):
-            os.system("wget https://raw.githubusercontent.com/moinnadeem/StereoSet/master/data/dev.json")
+        if not os.path.exists(os.path.abspath(".data/dev.json")):
+            os.system("wget https://raw.githubusercontent.com/moinnadeem/StereoSet/master/data/dev.json .data")
 
     def get_metric_details(self):
         raise metric.TaskMetadata(

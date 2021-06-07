@@ -133,3 +133,4 @@ corefBias
 dev.json
 custom_models
 sent-bias
+.data

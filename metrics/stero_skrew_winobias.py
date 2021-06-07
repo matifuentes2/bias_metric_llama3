@@ -15,18 +15,18 @@ class SteroSkrewWino(metric.Metric):
 
     def __init__(self, cuda = True, seed=42, verbose=False):
         self.download_data()
-        self.protest1 = "corefBias/WinoBias/wino/data/pro_stereotyped_type1.txt.test"
-        self.antitest1 = "corefBias/WinoBias/wino/data/anti_stereotyped_type1.txt.test"
-        self.protest2 = "corefBias/WinoBias/wino/data/pro_stereotyped_type2.txt.test"
-        self.antitest2 = "corefBias/WinoBias/wino/data/anti_stereotyped_type2.txt.test"
+        self.protest1 = ".data/corefBias/WinoBias/wino/data/pro_stereotyped_type1.txt.test"
+        self.antitest1 = ".data/corefBias/WinoBias/wino/data/anti_stereotyped_type1.txt.test"
+        self.protest2 = ".data/corefBias/WinoBias/wino/data/pro_stereotyped_type2.txt.test"
+        self.antitest2 = ".data/corefBias/WinoBias/wino/data/anti_stereotyped_type2.txt.test"
         self.char_set = string.ascii_uppercase + string.digits
         self.cuda = cuda
         self.device = "cuda" if self.cuda else "cpu"
 
         
     def download_data(self):
-        if not os.path.isdir('corefBias'):
-            os.system("git clone https://github.com/uclanlp/corefBias.git")
+        if not os.path.isdir('.data/corefBias'):
+            os.system("git clone https://github.com/uclanlp/corefBias.git .data")
         
     def get_metric_details(self):
         raise metric.TaskMetadata(

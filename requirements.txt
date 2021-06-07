@@ -5,3 +5,7 @@ sklearn==0.24.2
 tabulate
 sentencepiece==0.1.95
 tensorflow-gpu==2.5.0
+scipy
+matplotlib
+seaborn
+emoji

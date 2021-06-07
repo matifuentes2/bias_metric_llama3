@@ -19,7 +19,7 @@ class SEAT(metric.Metric):
 
     def __init__(self, cuda = True, seed=42, verbose=False):
         self.download_data()
-        self.data_dir = "sent-bias/tests"
+        self.data_dir = ".data/sent-bias/tests"
         self.all_tests = sorted(
             [
                 entry[:-len('.jsonl')]
@@ -41,8 +41,8 @@ class SEAT(metric.Metric):
             )
 
     def download_data(self):
-        if not os.path.isdir('sent-bias'):
-            os.system("git clone https://github.com/W4ngatang/sent-bias.git")
+        if not os.path.isdir('.data/sent-bias'):
+            os.system("git clone https://github.com/W4ngatang/sent-bias.git .data")
          
     # ORIGINAL ENCODE 
     # def encode(model, tokenizer, texts):
