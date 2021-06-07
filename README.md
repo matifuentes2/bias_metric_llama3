@@ -21,13 +21,14 @@ To run all this metric on different models use:
 python main.py
 ```
 
+## Visulization (Parallel Coordinates)
+Check the Parallel Coordinates [HERE](https://andreamad8.github.io/BIAS_METRIC_RANKING/vizjs/).
+
 ## Correlation Plots
 ![alt text](img/ranking_bias_sum.png "Correlation plot")
 
 ![alt text](img/ranking_bias_ALL.png "Correlation plot with all metric")
 
-## Visulization (Parallel Coordinates)
-Check the Parallel Coordinates [HERE](https://andreamad8.github.io/BIAS_METRIC_RANKING/vizjs/).
 
 ## Results 
 
