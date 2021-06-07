@@ -7,6 +7,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import json
 import numpy as np
+import csv
 
 
 
@@ -165,49 +166,50 @@ selected_clm = [
         "sent-weat7b",
         "sent-weat8",
         "sent-weat8b",
-        "ICAT Score",
-        "stero T1",
-        "neutral_score T1",
         "neutral_score T2",
         "stero T2",
-        "skew T1",
-        "skew T2",
-
-        "LM Score",
-        "SS Score",
-        "dist T1",
-        "dist_neutral T1",
-        "dist T2",
-        "dist_neutral T2",
+        # "neutral_score T1",
+        # "stero T1",
+        "ICAT Score",
+        # "skew T1",
+        # "skew T2",
+        # "LM Score",
+        # "SS Score",
+        # "dist T1",
+        # "dist_neutral T1",
+        # "dist T2",
+        # "dist_neutral T2",
 ]
 to_avg = [
-        # "angry_black_woman_stereotype",
-        # "angry_black_woman_stereotype_b",
-        # "heilman_double_bind_competent_1",
-        # "heilman_double_bind_competent_1+3-",
-        # "heilman_double_bind_competent_1-",
-        # "heilman_double_bind_competent_one_sentence",
-        # "heilman_double_bind_competent_one_word",
-        # "heilman_double_bind_likable_1",
-        # "heilman_double_bind_likable_1+3-",
-        # "heilman_double_bind_likable_1-",
-        # "heilman_double_bind_likable_one_sentence",
-        # "heilman_double_bind_likable_one_word",
-        # "sent-angry_black_woman_stereotype",
-        # "sent-angry_black_woman_stereotype_b",
-        # "sent-heilman_double_bind_competent_one_word",
-        # "sent-heilman_double_bind_likable_one_word",
-        # "sent-weat6",
-        # "sent-weat6b",
-        # "sent-weat7",
-        # "sent-weat7b",
-        # "sent-weat8",
-        # "sent-weat8b",
+        "angry_black_woman_stereotype",
+        "angry_black_woman_stereotype_b",
+        "heilman_double_bind_competent_1",
+        "heilman_double_bind_competent_1+3-",
+        "heilman_double_bind_competent_1-",
+        "heilman_double_bind_competent_one_sentence",
+        "heilman_double_bind_competent_one_word",
+        "heilman_double_bind_likable_1",
+        "heilman_double_bind_likable_1+3-",
+        "heilman_double_bind_likable_1-",
+        "heilman_double_bind_likable_one_sentence",
+        "heilman_double_bind_likable_one_word",
+        "sent-angry_black_woman_stereotype",
+        "sent-angry_black_woman_stereotype_b",
+        "sent-heilman_double_bind_competent_one_word",
+        "sent-heilman_double_bind_likable_one_word",
+        "sent-weat6",
+        "sent-weat6b",
+        "sent-weat7",
+        "sent-weat7b",
+        "sent-weat8",
+        "sent-weat8b",
 ]
 table_new = []
 arr_numbers = []
 for t in table:
     dic = {}
+    dic["Model"]= t['Model'].replace("custom_models/","").replace("google/","").replace("microsoft/","").replace("YituTech/","").replace("-discriminator","").replace("-uncased","").replace("squeezebert/","")
+    print(dic["Model"])
     seat = []
     for c in selected_clm:
         if c in to_avg:
@@ -217,11 +219,19 @@ for t in table:
         else:
             dic[c] = t[c]
     dic["SEAT"] = np.mean(seat)
-    arr_numbers.append(list(dic.values()))
-    dic["Model"]= t['Model'].replace("custom_models/","").replace("google/","").replace("microsoft/","").replace("YituTech/","").replace("-discriminator","").replace("-uncased","")
     table_new.append(dic)
+    # del dic['Model']
+    arr_numbers.append(list(v for k, v in dic.items() if k!= "Model" ))
 
 print(tabulate(table_new,tablefmt="github",headers="keys"))
+with open('vizjs/results.csv', mode='w') as fi:
+    writer = csv.writer(fi, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    writer.writerow(list(table_new[0].keys())+["group"])
+    for row in table_new:
+        if "-A" in row['Model']:
+            writer.writerow(list(row.values())+[1])
+        else:
+            writer.writerow(list(row.values())+[0])
 
 # plt.rcParams.update({'font.size': 8})
 names = list(table_new[0].keys())

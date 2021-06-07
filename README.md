@@ -26,7 +26,6 @@ python main.py
 ***Summury***
 |   ICAT Score |   stero T1 |   stero T2 |   neutral_score T1 |   neutral_score T2 |        SEAT | Model                   |
 |--------------|------------|------------|--------------------|--------------------|-------------|-------------------------|
-|      31.0765 |   0        |   0.889996 |          0.792929  |           0.787879 |   0.763151  | distilbert-base         |
 |      40.2582 |   0        |   0.30182  |          0.578283  |           0.494949 |   0.212605  | bert-large-A            |
 |      42.4767 |   0        |   0.625153 |          0.247475  |           0.161616 |   0.954114  | albert-base-v2-A        |
 |      40.3126 |   0        |   0.227338 |          0.522727  |           0.489899 | nan         | albert-xxlarge-v2-A     |
@@ -67,6 +66,7 @@ python main.py
 |      33.4985 |   2.26141  |   0.82703  |          0.575758  |           0.5      |   0.768783  | roberta-base            |
 |      37.8482 |   0        |   0.665338 |          0.679293  |           0.65404  |   0.140031  | albert-xxlarge-v2       |
 |      19.8099 |   0        |   0.419313 |          0.719697  |           0.573232 |  -0.313573  | xlm-roberta-base        |
+|      31.0765 |   0        |   0.889996 |          0.792929  |           0.787879 |   0.763151  | distilbert-base         |
 
 ***All Metric***
 |   angry_black_woman_stereotype |   angry_black_woman_stereotype_b |   heilman_double_bind_competent_1 |   heilman_double_bind_competent_1+3- |   heilman_double_bind_competent_1- |   heilman_double_bind_competent_one_sentence |   heilman_double_bind_competent_one_word |   heilman_double_bind_likable_1 |   heilman_double_bind_likable_1+3- |   heilman_double_bind_likable_1- |   heilman_double_bind_likable_one_sentence |   heilman_double_bind_likable_one_word |   sent-angry_black_woman_stereotype |   sent-angry_black_woman_stereotype_b |   sent-heilman_double_bind_competent_one_word |   sent-heilman_double_bind_likable_one_word |   sent-weat6 |   sent-weat6b |   sent-weat7 |   sent-weat7b |   sent-weat8 |   sent-weat8b |   ICAT Score |   stero T1 |   neutral_score T1 |   neutral_score T2 |   stero T2 |   skew T1 |   skew T2 |   LM Score |   SS Score |          dist T1 |   dist_neutral T1 |          dist T2 |   dist_neutral T2 |   SEAT | Model                   |
