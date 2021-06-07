@@ -123,7 +123,7 @@ python main.py
 
 ## Metric class
 To add a new metric, implement the following class:
-```
+```python
 class Metric(abc.ABC):
     """The base class for defining a metric.
         Extend this class to implement a custum bias metric.
