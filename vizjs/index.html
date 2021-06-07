@@ -1,9 +1,9 @@
 <!-- <script src="http://d3js.org/d3.v3.min.js"></script> -->
 <script src="https://d3js.org/d3.v6.min.js"></script>
-<script src="dist/d3.parcoords.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/underscore@1.13.1/underscore-umd-min.js"></script>
-<script src="dist/underscore.math.js"></script>
-<link rel="stylesheet" type="text/css" href="dist/d3.parcoords.css">
+<script src="./dist/d3.parcoords.js"></script>
+<script src="./dist/underscore.math.js"></script>
+<link rel="stylesheet" type="text/css" href="./dist/d3.parcoords.css">
 <div id="example-progressive" class="parcoords" style="width:100%;height:50%"></div>
 
 <script>
@@ -19,7 +19,7 @@
     .interpolate(d3.interpolateLab);
   
   // load csv file and create the chart
-  d3.csv('results.csv', function(data) {
+  d3.csv('./results.csv', function(data) {
     pcz = d3.parcoords()("#example-progressive")
       .data(data)
       .hideAxis(["group"])
