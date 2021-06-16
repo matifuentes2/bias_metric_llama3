@@ -141,9 +141,9 @@ def annotate_heatmap(im, data=None, valfmt="{x:.2f}",
 
 
 
-table = json.load(open(".data/results.json"))
+table = json.load(open(".data/results_re.json"))
 
-selected_clm = [
+SEAT = [
         "angry_black_woman_stereotype",
         "angry_black_woman_stereotype_b",
         "heilman_double_bind_competent_1",
@@ -160,26 +160,67 @@ selected_clm = [
         "sent-angry_black_woman_stereotype_b",
         "sent-heilman_double_bind_competent_one_word",
         "sent-heilman_double_bind_likable_one_word",
+        # "sent-weat1",
+        # "sent-weat2",
+        # "sent-weat3",
+        # "sent-weat3b",
+        # "sent-weat4",
+        # "sent-weat5",
+        # "sent-weat5b",
         "sent-weat6",
         "sent-weat6b",
         "sent-weat7",
         "sent-weat7b",
         "sent-weat8",
         "sent-weat8b",
-        "neutral_score T2",
-        "stero T2",
-        # "neutral_score T1",
-        # "stero T1",
+        # "sent-weat9",
+        # "sent-weat10",
+        # "weat1",
+        # "weat2",
+        # "weat3",
+        # "weat3b",
+        # "weat4",
+        # "weat5",
+        # "weat5b",
+        # "weat6",
+        # "weat6b",
+        # "weat7",
+        # "weat7b",
+        # "weat8",
+        # "weat8b",
+        # "weat9",
+        # "weat10",
+]
+Stero = [      
         "ICAT Score",
-        # "skew T1",
-        # "skew T2",
+        # "Count",  
         # "LM Score",
         # "SS Score",
+] 
+SteroSkrewWino = [
+        # "stero T1",
+        # "skew T1",
+        "stero T2",
+        # "skew T2",
+]
+
+EmbeddingWino = [
         # "dist T1",
         # "dist_neutral T1",
+        # "neutral_score T1",
         # "dist T2",
         # "dist_neutral T2",
+        "neutral_score T2",
 ]
+WW = [
+    # "log_norm",
+    "alpha",
+    # "alpha_weighted",
+    # "log_alpha_norm",
+    # "log_spectral_norm",
+    # "stable_rank",
+]
+
 to_avg = [
         "angry_black_woman_stereotype",
         "angry_black_woman_stereotype_b",
@@ -206,19 +247,49 @@ to_avg = [
 ]
 table_new = []
 arr_numbers = []
-for t in table:
+metric_to_eval = ["SEAT", "Stero", "SteroSkrewWino", "EmbeddingWino","WW"]
+for model_name, t in table.items():
     dic = {}
-    dic["Model"]= t['Model'].replace("custom_models/","").replace("google/","").replace("microsoft/","").replace("YituTech/","").replace("-discriminator","").replace("-uncased","").replace("squeezebert/","")
-    print(dic["Model"])
-    seat = []
-    for c in selected_clm:
-        if c in to_avg:
-            seat.append(t[c])
-        elif c == "ICAT Score" or c == "LM Score":
-            dic[c] = 100-t[c]
+    dic["Model"]= model_name.replace("custom_models/","").replace("google/","").replace("microsoft/","").replace("YituTech/","").replace("-discriminator","").replace("-uncased","").replace("squeezebert/","")
+    print(model_name)
+    for metric in metric_to_eval:
+        if metric in t:
+            if metric == "SEAT":
+                seat = []
+                for c in to_avg:
+                    seat.append(t[metric][c])
+                dic["SEAT"] = np.mean(seat)
+            elif metric == "Stero":
+                for c in Stero:
+                    if c == "ICAT Score" or c == "LM Score":
+                            dic[c] = 100-t[metric][c]
+                    else:
+                        dic[c] = t[metric][c]
+            elif metric == "SteroSkrewWino":
+                for c in SteroSkrewWino:
+                    dic[c] = t[metric][c]
+            elif metric == "EmbeddingWino":
+                for c in EmbeddingWino:
+                    dic[c] = t[metric][c]
+            elif metric == "WW":
+                for c in WW:
+                    dic[c] = t[metric][c]
         else:
-            dic[c] = t[c]
-    dic["SEAT"] = np.mean(seat)
+            if metric == "SEAT":
+                dic["SEAT"] = 0.0
+            elif metric == "Stero":
+                for c in Stero:
+                    dic[c] = 0.0
+            elif metric == "SteroSkrewWino":
+                for c in SteroSkrewWino:
+                    dic[c] = 0.0
+            elif metric == "EmbeddingWino":
+                for c in EmbeddingWino:
+                    dic[c] = 0.0
+            elif metric == "WW":
+                for c in WW:
+                    dic[c] = 0.0
+
     table_new.append(dic)
     # del dic['Model']
     arr_numbers.append(list(v for k, v in dic.items() if k!= "Model" ))
@@ -264,6 +335,6 @@ texts = annotate_heatmap(im, valfmt="{x:.1f}")
 
 fig.tight_layout()
 
-# plt.savefig("ranking_bias_sum.png",dpi=400)
+plt.savefig("img/ranking_bias_sum_new.png",dpi=400)
 
 
