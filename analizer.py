@@ -4,6 +4,7 @@ from scipy.stats import spearmanr
 from scipy.stats import pearsonr
 import numpy as np
 import matplotlib
+matplotlib.rcParams['text.usetex'] = True
 import matplotlib.pyplot as plt
 import json
 import numpy as np
@@ -77,11 +78,11 @@ def heatmap(data, row_labels, col_labels, ax=None,
     ax.grid(which="minor", color="w", linestyle='-', linewidth=3)
     ax.tick_params(which="minor", bottom=False, left=False)
     plt.xticks(rotation=45)
-    return im, cbar
+    return im, None
 
 
-def annotate_heatmap(im, data=None, valfmt="{x:.2f}",
-                     textcolors=("black", "white"),
+def annotate_heatmap(im, temp_stat, data=None, valfmt="{x:.2f}",
+                     textcolors=("black","grey"),
                      threshold=None, **textkw):
     """
     A function to annotate a heatmap.
@@ -132,7 +133,11 @@ def annotate_heatmap(im, data=None, valfmt="{x:.2f}",
     texts = []
     for i in range(data.shape[0]):
         for j in range(data.shape[1]):
-            kw.update(color=textcolors[int(im.norm(data[i, j]) > threshold)])
+            if temp_stat[i][j]:
+                # kw.update(weight="bold")#color=textcolors[int(im.norm(data[i, j]) > threshold)])
+                kw.update(weight="bold",color=textcolors[1])
+            else:
+                kw.update(color=textcolors[0])
             text = im.axes.text(j, i, valfmt(data[i, j], None), **kw)
             texts.append(text)
 
@@ -160,6 +165,13 @@ SEAT = [
         "sent-angry_black_woman_stereotype_b",
         "sent-heilman_double_bind_competent_one_word",
         "sent-heilman_double_bind_likable_one_word",
+        "sent-weat6",
+        "sent-weat6b",
+        "sent-weat7",
+        "sent-weat7b",
+        "sent-weat8",
+        "sent-weat8b",
+
         # "sent-weat1",
         # "sent-weat2",
         # "sent-weat3",
@@ -167,12 +179,6 @@ SEAT = [
         # "sent-weat4",
         # "sent-weat5",
         # "sent-weat5b",
-        "sent-weat6",
-        "sent-weat6b",
-        "sent-weat7",
-        "sent-weat7b",
-        "sent-weat8",
-        "sent-weat8b",
         # "sent-weat9",
         # "sent-weat10",
         # "weat1",
@@ -198,16 +204,16 @@ Stero = [
         # "SS Score",
 ] 
 SteroSkrewWino = [
-        # "stero T1",
-        # "skew T1",
+        "stero T1",
         "stero T2",
+        # "skew T1",
         # "skew T2",
 ]
 
 EmbeddingWino = [
         # "dist T1",
         # "dist_neutral T1",
-        # "neutral_score T1",
+        "neutral_score T1",
         # "dist T2",
         # "dist_neutral T2",
         "neutral_score T2",
@@ -221,6 +227,18 @@ WW = [
     # "stable_rank",
 ]
 
+map_names = {
+    "alpha":r"$\alpha$",
+    "neutral_score T1":"NT1",
+    "neutral_score T2":"NT2",
+    "stero T1":"ST1",
+    "stero T2":"ST2",
+    "skew T2":"SK2",
+    "skew T1":"SK1",
+    "ICAT Score":"ICAT",
+    "LM Score":"LM-ICAT",
+    "SS Score":"SS-ICAT",
+}
 to_avg = [
         "angry_black_woman_stereotype",
         "angry_black_woman_stereotype_b",
@@ -254,26 +272,29 @@ for model_name, t in table.items():
     print(model_name)
     for metric in metric_to_eval:
         if metric in t:
-            if metric == "SEAT":
+            if metric == "SEAT" and len(to_avg)>0:
                 seat = []
                 for c in to_avg:
                     seat.append(t[metric][c])
                 dic["SEAT"] = np.mean(seat)
+            elif metric == "SEAT" and len(to_avg)==0:
+                for c in SEAT:
+                    dic[c] = t[metric][c]
             elif metric == "Stero":
                 for c in Stero:
                     if c == "ICAT Score" or c == "LM Score":
-                            dic[c] = 100-t[metric][c]
+                        dic[map_names[c]] = 100-t[metric][c]
                     else:
-                        dic[c] = t[metric][c]
+                        dic[map_names[c]] = t[metric][c]
             elif metric == "SteroSkrewWino":
                 for c in SteroSkrewWino:
-                    dic[c] = t[metric][c]
+                    dic[map_names[c]] = t[metric][c]
             elif metric == "EmbeddingWino":
                 for c in EmbeddingWino:
-                    dic[c] = t[metric][c]
+                    dic[map_names[c]] = t[metric][c]
             elif metric == "WW":
                 for c in WW:
-                    dic[c] = t[metric][c]
+                    dic[map_names[c]] = t[metric][c]
         else:
             if metric == "SEAT":
                 dic["SEAT"] = 0.0
@@ -320,7 +341,7 @@ for i in range(n):
     for j in range(n):
         corr, p_val  = pearsonr(arr[i], arr[j])
         temp.append(corr)
-        temp_stat.append(True if p_val<0.5 else False)
+        temp_stat.append(True if p_val<0.05 else False)
 
     corr_mat.append(temp)
     stat_mat.append(temp_stat)
@@ -329,12 +350,13 @@ corr_mat = np.array(corr_mat)
 
 
 fig, ax = plt.subplots()#figsize=(15,18)
-
-im, cbar = heatmap(corr_mat, names, names, ax=ax, vmin=-1, vmax=1, cmap="Spectral", cbarlabel="Accuracy in %")
-texts = annotate_heatmap(im, valfmt="{x:.1f}")
+# fig, ax = plt.subplots(figsize=(15,18))
+names = [n.replace("_","\_")for n in names]
+im, cbar = heatmap(corr_mat, names, names, ax=ax, vmin=-1, vmax=1, cmap="Spectral", cbarlabel="Pearson Correlation")
+texts = annotate_heatmap(im,stat_mat, valfmt="{x:.1f}")
 
 fig.tight_layout()
 
-plt.savefig("img/ranking_bias_sum_new.png",dpi=400)
+plt.savefig("img/ranking.png",dpi=400)
 
 
