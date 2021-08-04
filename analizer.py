@@ -204,23 +204,23 @@ Stero = [
         # "SS Score",
 ] 
 SteroSkrewWino = [
-        "stero T1",
+        # "stero T1",
         "stero T2",
         # "skew T1",
-        # "skew T2",
+        "skew T2",
 ]
 
 EmbeddingWino = [
         # "dist T1",
         # "dist_neutral T1",
-        "neutral_score T1",
+        # "neutral_score T1",
         # "dist T2",
         # "dist_neutral T2",
-        "neutral_score T2",
+        # "neutral_score T2",
 ]
 WW = [
     # "log_norm",
-    "alpha",
+    # "alpha",
     # "alpha_weighted",
     # "log_alpha_norm",
     # "log_spectral_norm",
