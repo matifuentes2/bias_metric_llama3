@@ -200,13 +200,13 @@ SEAT = [
 Stero = [      
         "ICAT Score",
         # "Count",  
-        # "LM Score",
-        # "SS Score",
+        "LM Score",
+        "SS Score",
 ] 
 SteroSkrewWino = [
-        # "stero T1",
+        "stero T1",
         "stero T2",
-        # "skew T1",
+        "skew T1",
         "skew T2",
 ]
 
@@ -240,28 +240,28 @@ map_names = {
     "SS Score":"SS-ICAT",
 }
 to_avg = [
-        "angry_black_woman_stereotype",
-        "angry_black_woman_stereotype_b",
-        "heilman_double_bind_competent_1",
-        "heilman_double_bind_competent_1+3-",
-        "heilman_double_bind_competent_1-",
-        "heilman_double_bind_competent_one_sentence",
-        "heilman_double_bind_competent_one_word",
-        "heilman_double_bind_likable_1",
-        "heilman_double_bind_likable_1+3-",
-        "heilman_double_bind_likable_1-",
-        "heilman_double_bind_likable_one_sentence",
-        "heilman_double_bind_likable_one_word",
-        "sent-angry_black_woman_stereotype",
-        "sent-angry_black_woman_stereotype_b",
-        "sent-heilman_double_bind_competent_one_word",
-        "sent-heilman_double_bind_likable_one_word",
-        "sent-weat6",
-        "sent-weat6b",
-        "sent-weat7",
-        "sent-weat7b",
-        "sent-weat8",
-        "sent-weat8b",
+        # "angry_black_woman_stereotype",
+        # "angry_black_woman_stereotype_b",
+        # "heilman_double_bind_competent_1",
+        # "heilman_double_bind_competent_1+3-",
+        # "heilman_double_bind_competent_1-",
+        # "heilman_double_bind_competent_one_sentence",
+        # "heilman_double_bind_competent_one_word",
+        # "heilman_double_bind_likable_1",
+        # "heilman_double_bind_likable_1+3-",
+        # "heilman_double_bind_likable_1-",
+        # "heilman_double_bind_likable_one_sentence",
+        # "heilman_double_bind_likable_one_word",
+        # "sent-angry_black_woman_stereotype",
+        # "sent-angry_black_woman_stereotype_b",
+        # "sent-heilman_double_bind_competent_one_word",
+        # "sent-heilman_double_bind_likable_one_word",
+        # "sent-weat6",
+        # "sent-weat6b",
+        # "sent-weat7",
+        # "sent-weat7b",
+        # "sent-weat8",
+        # "sent-weat8b",
 ]
 table_new = []
 arr_numbers = []
@@ -316,14 +316,14 @@ for model_name, t in table.items():
     arr_numbers.append(list(v for k, v in dic.items() if k!= "Model" ))
 
 print(tabulate(table_new,tablefmt="github",headers="keys"))
-with open('vizjs/results.csv', mode='w') as fi:
-    writer = csv.writer(fi, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    writer.writerow(list(table_new[0].keys())+["group"])
-    for row in table_new:
-        if "-A" in row['Model']:
-            writer.writerow(list(row.values())+[1])
-        else:
-            writer.writerow(list(row.values())+[0])
+# with open('vizjs/results.csv', mode='w') as fi:
+#     writer = csv.writer(fi, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+#     writer.writerow(list(table_new[0].keys())+["group"])
+#     for row in table_new:
+#         if "-A" in row['Model']:
+#             writer.writerow(list(row.values())+[1])
+#         else:
+#             writer.writerow(list(row.values())+[0])
 
 # plt.rcParams.update({'font.size': 8})
 names = list(table_new[0].keys())
@@ -349,14 +349,14 @@ corr_mat = np.array(corr_mat)
 
 
 
-fig, ax = plt.subplots()#figsize=(15,18)
-# fig, ax = plt.subplots(figsize=(15,18))
+# fig, ax = plt.subplots()#figsize=(15,18)
+fig, ax = plt.subplots(figsize=(15,18))
 names = [n.replace("_","\_")for n in names]
 im, cbar = heatmap(corr_mat, names, names, ax=ax, vmin=-1, vmax=1, cmap="Spectral", cbarlabel="Pearson Correlation")
-texts = annotate_heatmap(im,stat_mat, valfmt="{x:.1f}")
+# texts = annotate_heatmap(im,stat_mat, valfmt="{x:.1f}")
 
 fig.tight_layout()
 
-plt.savefig("img/ranking.png",dpi=400)
+plt.savefig("img/ranking_all.png",dpi=400)
 
 
