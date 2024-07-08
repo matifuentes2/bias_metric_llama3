@@ -9,3 +9,4 @@ seaborn
 emoji
 weightwatcher
 accelerate
+prettytable

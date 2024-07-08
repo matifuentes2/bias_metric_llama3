@@ -11,6 +11,8 @@ from tabulate import tabulate
 from collections import defaultdict
 from huggingface_hub import login
 import torch
+from prettytable import PrettyTable
+
 
 
 def score_metric(model, tokenizer, metr):
@@ -46,8 +48,29 @@ seat_metric = SEAT()
 # Evaluate the model
 results = seat_metric.evaluate_model(model, tokenizer)
 
-# Process and display results
+# Create a PrettyTable object
+table = PrettyTable()
+table.field_names = ["Test", "Categories Compared", "p-value", "Effect Size"]
+    
+# Process and display results. Then add to table
 for score_data in results:
     print(f"Test: {score_data.score_name}")
     print(f"Score: {score_data.score_dict}")
     print("---")
+    test_name = score_data.score_name.split(" ")[-1]
+    categories = test_name.replace("_", " ").title()
+    p_value = score_data.score_dict[f'p_value {test_name}']
+    effect_size = score_data.score_dict[test_name]
+    
+    table.add_row([test_name, categories, f"{p_value:.6f}", f"{effect_size:.6f}"])
+
+# Set table styles
+table.align = "l"
+table.max_width = 120
+
+# Print the table
+print(table)
+
+# Optionally, save the table to a file
+with open("seat_results_summary.txt", "w") as f:
+    f.write(str(table))
