@@ -3,7 +3,6 @@ transformers
 torch
 tabulate
 sentencepiece
-tensorflow-gpu
 scipy
 matplotlib
 seaborn
