@@ -33,7 +33,7 @@ Check the Parallel Coordinates [HERE](https://andreamad8.github.io/BIAS_METRIC_R
 
 ## Results 
 
-***Summury***
+***Summary***
 | Model                   |        SEAT |    ICAT |      ST2 |       SK2 |
 |-------------------------|-------------|---------|----------|-----------|
 | bert-large-A            |   0.212605  | 40.2582 | 0.30182  | 51.5653   |
