@@ -78,8 +78,8 @@ class SEAT(metric.Metric):
     def evaluate_model(self, model, tokenizer):
       model.eval()
       score = []
-      #for test in self.all_tests:
-      for test in self.all_tests[:3]:
+      for test in self.all_tests:
+      #for test in self.all_tests[:3]:
           encs = load_json(os.path.join(self.data_dir, f"{test}.jsonl"))
           encs["targ1"]["encs"] = self.get_embedding_avg(encs["targ1"]["examples"], model, tokenizer)
           encs["targ2"]["encs"] = self.get_embedding_avg(encs["targ2"]["examples"], model, tokenizer)
