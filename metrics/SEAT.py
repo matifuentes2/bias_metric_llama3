@@ -120,7 +120,12 @@ def load_json(sent_file):
     return all_data  # data
 
 def cossim(x, y):
-    return np.dot(x, y) / math.sqrt(np.dot(x, x) * np.dot(y, y))
+    x = x.astype(np.float64)
+    y = y.astype(np.float64)
+    norm_x = np.linalg.norm(x)
+    norm_y = np.linalg.norm(y)
+    epsilon = 1e-8  # Small value to prevent division by zero
+    return np.dot(x, y) / (norm_x * norm_y + epsilon)
 
 
 def construct_cossim_lookup(XY, AB):
@@ -207,10 +212,10 @@ def p_val_permutation_test(X, Y, A, B, n_samples, cossims, parametric=False):
         the probability that a random even partition X_i, Y_i of X u Y
         satisfies P[s(X_i, Y_i, A, B) > s(X, Y, A, B)]
     '''
-    X = np.array(list(X), dtype=np.int)
-    Y = np.array(list(Y), dtype=np.int)
-    A = np.array(list(A), dtype=np.int)
-    B = np.array(list(B), dtype=np.int)
+    X = np.array(list(X), dtype=np.int64)  # Change np.int to np.int64
+    Y = np.array(list(Y), dtype=np.int64)  # Change np.int to np.int64
+    A = np.array(list(A), dtype=np.int64)  # Change np.int to np.int64
+    B = np.array(list(B), dtype=np.int64)  # Change np.int to np.int64
 
     assert len(X) == len(Y)
     size = len(X)
