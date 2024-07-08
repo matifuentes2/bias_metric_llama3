@@ -1,10 +1,10 @@
 # from metrics.stero_skrew_winobias import SteroSkrewWino
 # from metrics.steroset import Steroset
 # from metrics.embed_wino import EmbeddingWino
-from metrics.SEAT import SEAT
-# from metrics.ww import WW
-from transformers import AutoTokenizer, AutoModelForCausalLM #, AutoModel, AutoModelForMaskedLM
-#import glob
+from metrics.SEAT_spanish import SEAT
+from metrics.ww import WW
+from transformers import AutoTokenizer, AutoModelForCausalLM#, AutoModel, AutoModelForMaskedLM
+# import glob
 import os
 import json
 # from tabulate import tabulate  
@@ -22,8 +22,8 @@ def score_metric(model, tokenizer, metr):
         dic.update(r.score_dict)
     return dic
 
-if os.path.exists(".data/results_re.json"):
-    table = json.load(open(".data/results_re.json"))
+if os.path.exists(".data/results_re_spanish.json"):
+    table = json.load(open(".data/results_re_spanish.json"))
 else:
     table = defaultdict(lambda: defaultdict())
 
@@ -76,5 +76,5 @@ table.max_width = 120
 print(table)
 
 # Optionally, save the table to a file
-with open("seat_results_summary.txt", "w") as f:
+with open("seat_results_summary_spanish.txt", "w") as f:
     f.write(str(table))
