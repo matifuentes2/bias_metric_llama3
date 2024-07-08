@@ -41,7 +41,7 @@ class SEAT(metric.Metric):
             )
 
     def download_data(self):
-        if not os.path.isdir('.data/sent-bias'):
+        if not os.path.isdir('.data/sent-bias-spanish'):
             os.system("git clone https://github.com/matifuentes2/sent-bias-spanish.git .data/sent-bias-spanish")
          
     # ORIGINAL ENCODE 
