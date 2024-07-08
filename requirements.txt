@@ -1,7 +1,6 @@
 pandas
 transformers
 torch
-sklearn
 tabulate
 sentencepiece
 tensorflow-gpu
