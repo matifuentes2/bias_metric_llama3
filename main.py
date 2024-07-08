@@ -28,49 +28,19 @@ else:
 
 #models_debias = ["custom_models/bert-large-A","custom_models/albert-base-v2-A","custom_models/albert-xxlarge-v2-A","custom_models/bert-A","custom_models/distilbert-base-uncased-A","custom_models/google/bigbird-roberta-base-A","custom_models/google/bigbird-roberta-large-A","custom_models/google/electra-base-discriminator-A","custom_models/google/electra-large-discriminator-A","custom_models/google/electra-small-discriminator-A","custom_models/google/mobilebert-uncased-A","custom_models/microsoft/deberta-base-A","custom_models/microsoft/deberta-large-A","custom_models/microsoft/mpnet-base-A","custom_models/roberta-base-A","custom_models/roberta-large-A","custom_models/squeezebert-A","custom_models/xlm-roberta-base-A"]
 
+# Load Llama-3 8B model and tokenizer
 model_id = "meta-llama/Llama-3-8b"
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.float16, device_map="auto")
 
-#metric_to_eval = ["SEAT", "Stero", "SteroSkrewWino", "EmbeddingWino","WW"]
-metric_to_eval = ["SEAT"]
+# Initialize SEAT metric
+seat_metric = SEAT()
 
-for model_name in [model]:
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModel.from_pretrained(model_name)
-    model_MLM = AutoModelForMaskedLM.from_pretrained(model_name)
-    for metric in metric_to_eval:
-        if model_name in table and  metric in table[model_name]:
-            print(f"Skipping {model_name} for {metric} since it has been already eval")
-            continue
+# Evaluate the model
+results = seat_metric.evaluate_model(model, tokenizer)
 
-        print(f"Evaluating {model_name}")
-
-
-        if metric == "WW":
-            dic_results = score_metric(model, tokenizer, WW())
-        elif metric == "SEAT":
-            dic_results = score_metric(model_MLM, tokenizer, SEAT())
-        elif metric == "Stero":
-            dic_results = score_metric(model_MLM, tokenizer, Steroset(batch_size=1))
-        elif metric == "SteroSkrewWino":
-            dic_results = score_metric(model_MLM, tokenizer, SteroSkrewWino())
-        elif metric == "EmbeddingWino":
-            dic_results = score_metric(model_MLM, tokenizer, EmbeddingWino())
-
-
-        table[model_name][metric] = dic_results
-
-        with open('.data/results_re.json', 'w') as outfile:
-            json.dump(table, outfile, indent=4)
-
-
-        ## delete the evaluated model to avoid too large memory useage
-        ## UNCOMMENT THIS IF YOU DON'T WANT CACHE THE CHECKPOINTS
-        print("DELETING FILES")
-        files = glob.glob('/home/andrea/.cache/huggingface/transformers/*', recursive=True)
-        for f in files:
-            try:
-                os.remove(f)
-            except OSError as e:
-                print("Error: %s : %s" % (f, e.strerror))
+# Process and display results
+for score_data in results:
+    print(f"Test: {score_data.score_name}")
+    print(f"Score: {score_data.score_dict}")
+    print("---")
