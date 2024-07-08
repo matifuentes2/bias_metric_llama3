@@ -61,37 +61,37 @@ class SEAT(metric.Metric):
     #     return encs
 
     def get_embedding_avg(self, sentences, model, tokenizer, device):
-        model.eval()
-        encs = {}
-        for sentence in sentences:
-            inputs = tokenizer(sentence, return_tensors="pt").to(device)
-            with torch.no_grad():
-                outputs = model(**inputs,output_hidden_states=True)
-            last_hidden_states = outputs.hidden_states[-1]
-            encs[sentence] = torch.mean(last_hidden_states,dim=1).view(-1).cpu().numpy()
-        return encs
+      model.eval()
+      encs = {}
+      for sentence in sentences:
+          inputs = tokenizer(sentence, return_tensors="pt").to(device)
+          with torch.no_grad():
+              outputs = model(**inputs, output_hidden_states=True)
+          last_hidden_states = outputs.hidden_states[-1]
+          encs[sentence] = torch.mean(last_hidden_states, dim=1).view(-1).cpu().numpy()
+      return encs
 
 
 
     def evaluate_model(self, model, tokenizer):
-        model.to(self.device)
-        model.eval()
-        score = []
-        for test in self.all_tests:
-            encs = load_json(os.path.join(self.data_dir, f"{test}.jsonl"))
-            encs["targ1"]["encs"] = self.get_embedding_avg(encs["targ1"]["examples"], model, tokenizer, self.device)
-            encs["targ2"]["encs"] = self.get_embedding_avg(encs["targ2"]["examples"], model, tokenizer, self.device)
-            encs["attr1"]["encs"] = self.get_embedding_avg(encs["attr1"]["examples"], model, tokenizer, self.device)
-            encs["attr2"]["encs"] = self.get_embedding_avg(encs["attr2"]["examples"], model, tokenizer, self.device)
-            enc = [e for e in encs["targ1"]['encs'].values()][0]
-            d_rep = enc.size if isinstance(enc, np.ndarray) else len(enc)
-            esize, pval = run_test(encs, n_samples=100000, parametric=False)
-            score.append(metric.ScoreData(score_dict = {f'{test}':esize,f'p_value {test}':pval},
-                        preferred_score =f'{test}',
-                        low_score = 0,
-                        high_score = 1,
-                        score_name = f"SEAT {test}"))
-        return score
+      model.to(self.device)
+      model.eval()
+      score = []
+      for test in self.all_tests:
+          encs = load_json(os.path.join(self.data_dir, f"{test}.jsonl"))
+          encs["targ1"]["encs"] = self.get_embedding_avg(encs["targ1"]["examples"], model, tokenizer, self.device)
+          encs["targ2"]["encs"] = self.get_embedding_avg(encs["targ2"]["examples"], model, tokenizer, self.device)
+          encs["attr1"]["encs"] = self.get_embedding_avg(encs["attr1"]["examples"], model, tokenizer, self.device)
+          encs["attr2"]["encs"] = self.get_embedding_avg(encs["attr2"]["examples"], model, tokenizer, self.device)
+          enc = [e for e in encs["targ1"]['encs'].values()][0]
+          d_rep = enc.size if isinstance(enc, np.ndarray) else len(enc)
+          esize, pval = run_test(encs, n_samples=100000, parametric=False)
+          score.append(metric.ScoreData(score_dict = {f'{test}':esize,f'p_value {test}':pval},
+                      preferred_score =f'{test}',
+                      low_score = 0,
+                      high_score = 1,
+                      score_name = f"SEAT {test}"))
+      return score
 
 ''' Implements the WEAT tests '''
 # X and Y are two sets of target words of equal size.
