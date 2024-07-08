@@ -279,7 +279,7 @@ def p_val_permutation_test(X, Y, A, B, n_samples, cossims, parametric=False):
         else:
             log.info('Using exact test ({} partitions)'.format(num_partitions))
             for Xi in it.combinations(XY, len(X)):
-                Xi = np.array(Xi, dtype=np.int)
+                Xi = np.array(Xi, dtype=np.int64)
                 assert 2 * len(Xi) == len(XY)
                 si = s_XAB(Xi, s_wAB_memo)
                 if si > s:
