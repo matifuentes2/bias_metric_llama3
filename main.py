@@ -66,7 +66,7 @@ for score_data in results:
     attr1 = score_data.attr1,
     attr2 = score_data.attr2
     
-    table.add_row([test_name, targ1, targ2, attr1, attr2, categories, f"{p_value:.6f}", f"{effect_size:.6f}"])
+    table.add_row([test_name, targ1, targ2, attr1, attr2, f"{p_value:.6f}", f"{effect_size:.6f}"])
 
 # Set table styles
 table.align = "l"
