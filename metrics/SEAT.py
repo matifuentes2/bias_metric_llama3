@@ -42,7 +42,7 @@ class SEAT(metric.Metric):
 
     def download_data(self):
         if not os.path.isdir('.data/sent-bias'):
-            os.system("git clone https://github.com/W4ngatang/sent-bias.git .data")
+            os.system("git clone https://github.com/W4ngatang/sent-bias.git .data/sent-bias")
          
     # ORIGINAL ENCODE 
     # def encode(model, tokenizer, texts):
@@ -60,11 +60,13 @@ class SEAT(metric.Metric):
     #         encs[text] = enc.detach().view(-1).numpy()
     #     return encs
 
-    def get_embedding_avg(self, sentences, model, tokenizer, device):
+    def get_embedding_avg(self, sentences, model, tokenizer):
       model.eval()
       encs = {}
       for sentence in sentences:
-          inputs = tokenizer(sentence, return_tensors="pt").to(device)
+          inputs = tokenizer(sentence, return_tensors="pt")
+          # Move inputs to the same device as the model
+          inputs = {k: v.to(model.device) for k, v in inputs.items()}
           with torch.no_grad():
               outputs = model(**inputs, output_hidden_states=True)
           last_hidden_states = outputs.hidden_states[-1]
@@ -74,15 +76,14 @@ class SEAT(metric.Metric):
 
 
     def evaluate_model(self, model, tokenizer):
-      model.to(self.device)
       model.eval()
       score = []
       for test in self.all_tests:
           encs = load_json(os.path.join(self.data_dir, f"{test}.jsonl"))
-          encs["targ1"]["encs"] = self.get_embedding_avg(encs["targ1"]["examples"], model, tokenizer, self.device)
-          encs["targ2"]["encs"] = self.get_embedding_avg(encs["targ2"]["examples"], model, tokenizer, self.device)
-          encs["attr1"]["encs"] = self.get_embedding_avg(encs["attr1"]["examples"], model, tokenizer, self.device)
-          encs["attr2"]["encs"] = self.get_embedding_avg(encs["attr2"]["examples"], model, tokenizer, self.device)
+          encs["targ1"]["encs"] = self.get_embedding_avg(encs["targ1"]["examples"], model, tokenizer)
+          encs["targ2"]["encs"] = self.get_embedding_avg(encs["targ2"]["examples"], model, tokenizer)
+          encs["attr1"]["encs"] = self.get_embedding_avg(encs["attr1"]["examples"], model, tokenizer)
+          encs["attr2"]["encs"] = self.get_embedding_avg(encs["attr2"]["examples"], model, tokenizer)
           enc = [e for e in encs["targ1"]['encs'].values()][0]
           d_rep = enc.size if isinstance(enc, np.ndarray) else len(enc)
           esize, pval = run_test(encs, n_samples=100000, parametric=False)
