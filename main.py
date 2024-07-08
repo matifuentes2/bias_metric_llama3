@@ -50,7 +50,7 @@ results = seat_metric.evaluate_model(model, tokenizer)
 
 # Create a PrettyTable object
 table = PrettyTable()
-table.field_names = ["Test", "Categories Compared", "p-value", "Effect Size"]
+table.field_names = ["Test", "Targ1", "Targ2", "Atr1", "Atr2" , "p-value", "Effect Size"]
     
 # Process and display results. Then add to table
 for score_data in results:
@@ -61,8 +61,12 @@ for score_data in results:
     categories = test_name.replace("_", " ").title()
     p_value = score_data.score_dict[f'p_value {test_name}']
     effect_size = score_data.score_dict[test_name]
+    targ1 = score_data.targ1,
+    targ2 = score_data.targ2,
+    attr1 = score_data.attr1,
+    attr2 = score_data.attr2
     
-    table.add_row([test_name, categories, f"{p_value:.6f}", f"{effect_size:.6f}"])
+    table.add_row([test_name, targ1, targ2, attr1, attr2, categories, f"{p_value:.6f}", f"{effect_size:.6f}"])
 
 # Set table styles
 table.align = "l"
