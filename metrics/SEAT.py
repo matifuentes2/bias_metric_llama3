@@ -92,11 +92,11 @@ class SEAT(metric.Metric):
                       preferred_score =f'{test}',
                       low_score = 0,
                       high_score = 1,
-                      score_name = f"SEAT {test}"),
+                      score_name = f"SEAT {test}",
                       targ1 = encs["targ1"]["category"],
                       targ2 = encs["targ2"]["category"],
                       attr1 = encs["attr1"]["category"],
-                      attr2 = encs["attr2"]["category"])
+                      attr2 = encs["attr2"]["category"]))
       return score
 
 ''' Implements the WEAT tests '''

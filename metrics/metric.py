@@ -28,6 +28,10 @@ class ScoreData:
     low_score: float
     high_score: float
     score_name: str
+    targ1: str
+    targ2: str
+    attr1: str
+    attr2: str
 
 
 @dataclasses.dataclass
