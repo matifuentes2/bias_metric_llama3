@@ -61,9 +61,9 @@ for score_data in results:
     categories = test_name.replace("_", " ").title()
     p_value = score_data.score_dict[f'p_value {test_name}']
     effect_size = score_data.score_dict[test_name]
-    targ1 = score_data.targ1,
-    targ2 = score_data.targ2,
-    attr1 = score_data.attr1,
+    targ1 = score_data.targ1
+    targ2 = score_data.targ2
+    attr1 = score_data.attr1
     attr2 = score_data.attr2
     
     table.add_row([test_name, targ1, targ2, attr1, attr2, f"{p_value:.6f}", f"{effect_size:.6f}"])
